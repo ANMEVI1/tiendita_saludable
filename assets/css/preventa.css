@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --color-bg-dark: #050505;
+  --color-bg-surface: #121212;
+  --color-gold: #d4af37;
+  --color-gold-light: #f1c40f;
+  --color-gold-dark: #b5952f;
+  --color-text-light: #f5f5f5;
+  --color-text-muted: #999999;
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6, .font-heading {
+  font-family: 'Cinzel', serif;
+}
+
+.text-gold { color: var(--color-gold); }
+.bg-gold { background-color: var(--color-gold); color: #000; }
+.bg-gold:hover { background-color: var(--color-gold-light); }
+.border-gold { border-color: var(--color-gold); }
+
+/* Preventa specific styles */
+.countdown-box {
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+.stock-indicator {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0,0,0,0.8);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+.preventa-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid #222;
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.preventa-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 1px solid var(--color-gold);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.preventa-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(212, 175, 55, 0.15);
+}
+
+.preventa-card:hover::before {
+  opacity: 1;
+}
+
+.hero-gradient-preventa {
+  background: radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, rgba(5,5,5,1) 70%);
+}
+
+.glow-text {
+  text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
+}
