@@ -20,10 +20,8 @@ jobs:
     - name: 📂 Sincronizar archivos por FTP
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        server: ftpupload.net
-        username: if0_42978231
-        # Es MUY importante que tu secreto en GitHub se llame exactamente FTP_PASSWORD
-        # y contenga la contraseña que se ve en tu captura (empe20264)
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         
         # InfinityFree normalmente requiere que los archivos públicos se suban a htdocs/
