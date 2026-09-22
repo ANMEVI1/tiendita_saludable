@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Cuenta | La Tiendita Saludable</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#d4af37',
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link rel="stylesheet" href="assets/css/auth.css">
@@ -52,13 +63,7 @@
                     <i class="ph ph-eye password-toggle" onclick="togglePassword('confirm-password', this)" title="Mostrar contraseña"></i>
                 </div>
 
-                <button type="submit" class="auth-btn mt-2">Crear Cuenta</button>
-
-                <div class="auth-divider">o</div>
-
-                <button type="button" class="auth-btn-google mb-6">
-                    <i class="ph ph-google-logo text-lg"></i> Regístrate con Google
-                </button>
+                <button type="submit" class="auth-btn mb-6 mt-2">Crear Cuenta</button>
 
                 <p class="text-center text-sm text-gray-400">
                     ¿Ya tienes una cuenta? <a href="login.html" class="page-transition text-[#d4af37] hover:text-white transition-colors ml-1 font-semibold uppercase tracking-wider text-xs">Iniciar Sesión</a>

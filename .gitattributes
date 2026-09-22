@@ -1,0 +1,31 @@
+# 1. Configuración general: Forzar LF (estándar de Linux) para todos los archivos de texto
+* text=auto eol=lf
+
+# 2. Archivos fuente web: Garantizar que siempre se manejen como texto puro con LF
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.md text eol=lf
+*.yml text eol=lf
+
+# 3. Archivos vectoriales: Tratar como texto (SVG es un archivo XML)
+*.svg text eol=lf
+
+# 4. PREVENCIÓN DE CORRUPCIÓN (Archivos Binarios)
+# Al marcarlos como 'binary', le prohibimos estrictamente a Git que intente 
+# "arreglar" los saltos de línea dentro de estos archivos. Si Git tocara los saltos 
+# de línea en un JPG o PDF, el archivo se rompería permanentemente.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.cdr binary
+
+# Fuentes tipográficas
+*.ttf binary
+*.woff binary
+*.woff2 binary
+*.eot binary

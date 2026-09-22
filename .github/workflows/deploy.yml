@@ -1,0 +1,38 @@
+name: Deploy to InfinityFree FTP
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Permite ejecutar el workflow manualmente desde GitHub
+
+jobs:
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Obtener el código más reciente
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
+      
+    - name: 📂 Sincronizar archivos por FTP
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ftpupload.net
+        username: if0_42978231
+        # Es MUY importante que tu secreto en GitHub se llame exactamente FTP_PASSWORD
+        # y contenga la contraseña que se ve en tu captura (empe20264)
+        password: ${{ secrets.FTP_PASSWORD }}
+        
+        # InfinityFree normalmente requiere que los archivos públicos se suban a htdocs/
+        server-dir: htdocs/
+        
+        # Ignorar archivos innecesarios en producción
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          propuestas/**
+          README.md

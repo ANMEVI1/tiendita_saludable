@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es" style="scroll-behavior: smooth;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosotros | La Tiendita Saludable</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#d4af37',
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Iconos Phosphor -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Estilos Personalizados -->
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="antialiased bg-[#050505] text-white overflow-x-hidden">
+
+    <!-- Header -->
+    <header class="border-b border-[#333] sticky top-0 z-50 bg-[#0a0a0a]/90 backdrop-blur-md animate__animated animate__fadeInDown">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20 md:h-24">
+                <a href="index.html" class="flex items-center gap-3 md:gap-4 group">
+                    <div class="relative w-12 h-12 md:w-16 md:h-16 overflow-hidden rounded-sm border-2 border-transparent group-hover:border-gold/50 transition-all duration-300 shadow-[0_0_15px_rgba(212,175,55,0.1)]">
+                        <img src="assets/img/logo/logo_relialista_negro.jpg" alt="Logo La Tiendita Saludable" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <span class="text-xl md:text-3xl font-heading font-bold text-white tracking-[0.15em] uppercase leading-none">La Tiendita</span>
+                        <span class="text-gold text-[10px] md:text-sm tracking-[0.4em] uppercase font-semibold leading-none mt-1.5 md:mt-1 ml-0.5">Saludable</span>
+                    </div>
+                </a>
+                
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a href="index.html" class="page-transition text-sm font-medium tracking-widest uppercase text-gray-400 hover:text-gold transition-colors">Inicio</a>
+                    <a href="index.html#productos" class="page-transition text-sm font-medium tracking-widest uppercase text-gray-400 hover:text-gold transition-colors">Colección</a>
+                    <a href="sobre-nosotros.html" class="text-sm font-medium tracking-widest uppercase text-white hover:text-gold transition-colors">Sobre Nosotros</a>
+                    <a href="preventa.html" class="page-transition text-sm font-bold tracking-widest uppercase text-gold hover:text-white transition-colors flex items-center border border-gold/30 px-3 py-1 bg-gold/10 rounded-sm">
+                        <span class="w-2 h-2 rounded-full bg-gold animate-pulse mr-2"></span> Preventa
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-5 md:space-x-6">
+                    <a href="login.html" class="page-transition hidden md:block text-xs uppercase tracking-widest border border-gold text-gold px-4 py-2 hover:bg-gold hover:text-black transition-colors">Entrar</a>
+                    <a href="login.html" class="page-transition md:hidden text-gray-400 hover:text-gold transition-colors"><i class="ph ph-user text-2xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-gold transition-colors"><i class="ph ph-shopping-bag text-2xl"></i></a>
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-400 hover:text-gold transition-colors"><i class="ph ph-list text-3xl"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#050505]/98 backdrop-blur-xl z-[100] flex flex-col justify-center items-center opacity-0 pointer-events-none transition-all duration-500 scale-105">
+        <button id="close-menu-btn" class="absolute top-6 right-6 text-gray-400 text-4xl hover:text-gold transition-colors"><i class="ph ph-x"></i></button>
+        <nav class="flex flex-col space-y-8 items-center text-center">
+            <a href="index.html" class="mobile-link page-transition text-2xl font-heading tracking-widest uppercase text-gray-400 hover:text-gold transition-colors">Inicio</a>
+            <a href="index.html#productos" class="mobile-link page-transition text-2xl font-heading tracking-widest uppercase text-gray-400 hover:text-gold transition-colors">Colección</a>
+            <a href="sobre-nosotros.html" class="mobile-link text-2xl font-heading tracking-widest uppercase text-white hover:text-gold transition-colors">Nuestra Esencia</a>
+            <a href="preventa.html" class="page-transition text-2xl font-heading font-bold tracking-widest uppercase text-gold hover:text-white transition-colors">Preventa</a>
+            <a href="login.html" class="page-transition mt-8 text-sm uppercase tracking-widest border border-gold text-gold px-8 py-3 hover:bg-gold hover:text-black transition-colors">Iniciar Sesión</a>
+        </nav>
+    </div>
+
+    <main id="main-content" class="animate__animated animate__fadeIn">
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-16 md:pt-40 md:pb-24 border-b border-[#333]">
+            <div class="absolute inset-0 z-0">
+                <img src="https://images.unsplash.com/photo-1505253758473-96b7015fcd40?q=80&w=2000&auto=format&fit=crop" alt="Panadería" class="w-full h-full object-cover opacity-10">
+                <div class="absolute inset-0 bg-gradient-to-b from-[#050505]/50 via-[#050505]/80 to-[#050505]"></div>
+            </div>
+            <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center animate-on-scroll" data-animation="animate__fadeInUp">
+                <h2 class="text-gold tracking-[0.3em] text-xs md:text-sm font-semibold mb-4 uppercase">Conoce Nuestra Esencia</h2>
+                <h1 class="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight">Nuestra Historia y Propósito</h1>
+                <p class="text-gray-400 text-lg md:text-xl font-light tracking-wide max-w-2xl mx-auto">Más que una panadería, somos una familia comprometida con tu bienestar y nutrición.</p>
+            </div>
+        </section>
+
+        <!-- Dynamic Content Sections -->
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 space-y-24">
+            
+            <!-- Misión -->
+            <section id="mision" class="animate-on-scroll" data-animation="animate__fadeInUp">
+                <div class="flex items-center gap-4 mb-8">
+                    <i class="ph ph-target text-gold text-4xl"></i>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold">Nuestra Misión</h2>
+                </div>
+                <div class="text-gray-300 font-light leading-relaxed text-lg md:text-xl">
+                    <p class="font-story italic text-2xl md:text-3xl text-gray-200 mb-8 border-l-2 border-gold pl-6">
+                        "Cuidar de tu bienestar y el de tu familia ofreciendo productos de consumo 100% naturales y saludables."
+                    </p>
+                    <p class="mb-6">
+                        Nos dedicamos a brindarte una atención humana y personalizada, llevando lo mejor de la naturaleza directamente a la puerta de tu casa de forma gratuita en el AA.HH. Andrés Araujo Morán (Tumbes). A través de nuestro cuidadoso modelo de pedidos programados y preventa exclusiva, nos aseguramos de que cada producto que recibas llegue con la mejor calidad y frescura a tu mesa.
+                    </p>
+                    <!-- Espacio adaptable para contenido futuro -->
+                    <div class="mt-8 p-6 border border-[#222] bg-[#0a0a0a] rounded-sm">
+                        <p class="text-sm text-gray-500 italic flex items-start gap-2">
+                            <i class="ph ph-info text-gold text-lg mt-0.5"></i>
+                            <span>Puedes añadir más contenido aquí (Ej. Listado de valores, fotos del equipo, proceso de producción). El diseño está preparado para adaptarse a cualquier cantidad de texto.</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Visión -->
+            <section id="vision" class="animate-on-scroll" data-animation="animate__fadeInUp">
+                <div class="flex items-center gap-4 mb-8">
+                    <i class="ph ph-eye text-gold text-4xl"></i>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold">Nuestra Visión</h2>
+                </div>
+                <div class="text-gray-300 font-light leading-relaxed text-lg md:text-xl">
+                    <p class="font-story italic text-2xl md:text-3xl text-gray-200 mb-8 border-l-2 border-gold pl-6">
+                        "Consolidar a Tiendita Saludable como un espacio físico de referencia en bienestar y sostenibilidad."
+                    </p>
+                    <p class="mb-6">
+                        Proyectamos expandir nuestra oferta integrando alimentos artesanales de la más alta calidad, junto con una línea integral de productos ecológicos para el cuidado personal y del hogar. Nos impulsa el compromiso de crear un ambiente acogedor y profundamente conectado con la naturaleza, mientras generamos un impacto social positivo al fomentar la empleabilidad y el desarrollo de nuestra comunidad local.
+                    </p>
+                    <div class="mt-8 p-6 border border-[#222] bg-[#0a0a0a] rounded-sm">
+                        <p class="text-sm text-gray-500 italic flex items-start gap-2">
+                            <i class="ph ph-info text-gold text-lg mt-0.5"></i>
+                            <span>Espacio adaptable para imágenes de la futura tienda física o un "moodboard" de la visión.</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historia -->
+            <section id="historia" class="animate-on-scroll" data-animation="animate__fadeInUp">
+                <div class="flex items-center gap-4 mb-8">
+                    <i class="ph ph-book-open text-gold text-4xl"></i>
+                    <h2 class="text-3xl md:text-4xl font-heading font-bold">Nuestra Historia</h2>
+                </div>
+                <div class="text-gray-300 font-light leading-relaxed text-lg md:text-xl">
+                    <p class="font-story italic text-2xl md:text-3xl text-gray-200 mb-8 border-l-2 border-gold pl-6">
+                        "Una profunda necesidad personal por superar adversidades y encontrar productos que realmente protegieran nuestra salud."
+                    </p>
+                    <p class="mb-6">
+                        Tiendita Saludable nació de una profunda necesidad personal: superar las adversidades económicas y, sobre todo, encontrar productos que realmente protegieran mi salud y la de mis hijos. Al buscar estas alternativas, me enfrenté a un mercado que carecía de opciones verdaderamente sanas.
+                    </p>
+                    <p class="mb-6">
+                        En ese camino, descubrí que muchas otras personas compartían mi misma lucha y frustración. Así, lo que comenzó como una búsqueda para el bienestar de mi familia, se transformó en un espacio dedicado a brindar a nuestra comunidad las opciones que tanto necesitábamos para mantener una alimentación sana y consciente.
+                    </p>
+                    <div class="mt-8 p-6 border border-[#222] bg-[#0a0a0a] rounded-sm">
+                        <p class="text-sm text-gray-500 italic flex items-start gap-2">
+                            <i class="ph ph-info text-gold text-lg mt-0.5"></i>
+                            <span>Espacio adaptable. Aquí quedará excelente una galería de fotos de los primeros días del negocio y del crecimiento a través del tiempo.</span>
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contacto" class="pt-16 md:pt-20 pb-8 md:pb-10 bg-[#0a0a0a] border-t border-[#333] animate-on-scroll" data-animation="animate__fadeIn">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-12 mb-12 md:mb-16">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-heading font-bold text-white tracking-widest uppercase mb-6">La Tiendita<br><span class="text-gold text-base">Saludable</span></h2>
+                    <p class="text-gray-400 font-light max-w-sm mb-6 text-sm md:text-base">Comprometidos con la excelencia en cada horneado, utilizando solo ingredientes integrales de la más alta pureza en Tumbes.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full border border-[#333] flex items-center justify-center text-gray-400 hover:border-gold hover:text-gold transition-colors"><i class="ph ph-instagram-logo"></i></a>
+                        <a href="#" class="w-10 h-10 rounded-full border border-[#333] flex items-center justify-center text-gray-400 hover:border-gold hover:text-gold transition-colors"><i class="ph ph-facebook-logo"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-white font-heading tracking-widest uppercase mb-6">Contacto</h3>
+                    <ul class="space-y-4 text-gray-400 font-light text-sm">
+                        <li class="flex items-start"><i class="ph ph-map-pin text-gold mr-3 mt-1 text-lg"></i> Tumbes, Perú</li>
+                        <li class="flex items-start"><i class="ph ph-phone text-gold mr-3 mt-1 text-lg"></i> +51 984 247 684</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-white font-heading tracking-widest uppercase mb-6">Privacidad</h3>
+                    <ul class="space-y-4 text-gray-400 font-light text-sm">
+                        <li><a href="#" class="hover:text-gold transition-colors">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-gold transition-colors">Política de Privacidad</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-[#333] pt-8 text-center">
+                <p class="text-gray-600 text-xs tracking-widest uppercase">&copy; 2026 La Tiendita Saludable. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script de Animaciones y Lógica de UI -->
+    <script src="assets/js/animations.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Lógica Menú Móvil
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            function openMenu() {
+                mobileMenu.classList.remove('opacity-0', 'pointer-events-none', 'scale-105');
+                mobileMenu.classList.add('opacity-100', 'scale-100');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeMenu() {
+                mobileMenu.classList.remove('opacity-100', 'scale-100');
+                mobileMenu.classList.add('opacity-0', 'pointer-events-none', 'scale-105');
+                document.body.style.overflow = '';
+            }
+
+            mobileMenuBtn.addEventListener('click', openMenu);
+            closeMenuBtn.addEventListener('click', closeMenu);
+            
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', closeMenu);
+            });
+            
+            // Transiciones de página hermosas
+            const pageTransitions = document.querySelectorAll('.page-transition');
+            pageTransitions.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href.startsWith('#')) return; // No animar si es enlace a ancla local
+                    e.preventDefault();
+                    
+                    const mainContent = document.getElementById('main-content');
+                    if(mainContent) {
+                        mainContent.classList.remove('animate__fadeIn');
+                        mainContent.classList.add('animate__fadeOut', 'animate__faster');
+                    }
+                    setTimeout(() => { window.location.href = href; }, 300);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
