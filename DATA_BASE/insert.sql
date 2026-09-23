@@ -97,4 +97,6 @@ INSERT INTO `ts_configuracion_web` (`clave`, `valor`, `tipo_dato`, `descripcion`
 ('footer_descripcion', 'Comprometidos con la excelencia en cada horneado, utilizando solo ingredientes integrales de la más alta pureza en Tumbes.', 'TEXTO', 'Texto pequeño en el pie de página'),
 ('whatsapp_numero', '51984247684', 'TEXTO', 'Número principal de WhatsApp'),
 ('catalogo_titulo', 'La Colección', 'TEXTO', 'Título de la sección de productos'),
-('catalogo_descripcion', 'Nuestra línea completa de productos artesanales. Elaborados con ingredientes 100% integrales, sin azúcar refinada y llenos de sabor natural.', 'TEXTO', 'Subtítulo del catálogo');
+('catalogo_descripcion', 'Nuestra línea completa de productos artesanales. Elaborados con ingredientes 100% integrales, sin azúcar refinada y llenos de sabor natural.', 'TEXTO', 'Subtítulo del catálogo'),
+('limite_productos_categoria_inicio', '8', 'NUMERO', 'Número máximo de productos visibles por categoría en la página principal'),
+('limite_productos_preventa_inicio', '4', 'NUMERO', 'Número máximo de productos visibles en la sección de preventa');

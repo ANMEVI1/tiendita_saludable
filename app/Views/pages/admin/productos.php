@@ -105,7 +105,10 @@
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-right">
-                                            <button @click='openEditModal(<?= htmlspecialchars(json_encode($prod, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' class="text-gray-400 hover:text-gold transition-colors p-1" title="Editar Producto">
+                                            <button @click='openVariantesModal(<?= htmlspecialchars(json_encode($prod, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' class="text-gray-400 hover:text-blue-400 transition-colors p-1" title="Gestionar Variantes y Características">
+                                                <i class="ph ph-list-plus text-lg"></i>
+                                            </button>
+                                            <button @click='openEditModal(<?= htmlspecialchars(json_encode($prod, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' class="text-gray-400 hover:text-gold transition-colors p-1 ml-2" title="Editar Producto">
                                                 <i class="ph ph-pencil-simple text-lg"></i>
                                             </button>
                                             <button @click='openDeleteModal(<?= htmlspecialchars(json_encode($prod, JSON_HEX_APOS | JSON_HEX_QUOT), ENT_QUOTES, "UTF-8") ?>)' class="text-gray-400 hover:text-red-500 transition-colors p-1 ml-2" title="Eliminar Producto">
@@ -120,6 +123,105 @@
                 </div>
             </div>
         <?php endforeach; ?>
+    </div>
+
+    <!-- Modal Gestionar Variantes -->
+    <div x-show="modalVariantesOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80" style="display: none;" x-transition.opacity>
+        <div @click.away="modalVariantesOpen = false" class="bg-[#0c0c0c] border border-[#1a1a1a] p-8 w-full max-w-4xl relative shadow-2xl rounded-xl animate__animated animate__zoomIn animate__faster max-h-[90vh] overflow-y-auto">
+            <div class="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent"></div>
+            
+            <button type="button" @click="modalVariantesOpen = false" class="absolute top-4 right-4 text-[#555] hover:text-gold transition-colors focus:outline-none">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+            
+            <div class="mb-6">
+                <h2 class="text-[1.35rem] font-heading font-bold text-white tracking-widest uppercase mb-1">Opciones de <span x-text="formOpciones.producto_nombre" class="text-gold"></span></h2>
+                <p class="text-[#666] text-xs font-light">Gestiona los tamaños, precios y características adicionales.</p>
+            </div>
+            
+            <form action="/admin/productos/variantes/update" method="POST">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+                <input type="hidden" name="producto_id" x-model="formOpciones.producto_id">
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Variantes -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm text-gray-300 font-bold uppercase tracking-widest border-b border-gold/30 pb-2">Variantes / Precios</h3>
+                            <button type="button" @click="addVariante()" class="text-xs bg-[#222] text-white hover:bg-gold hover:text-black px-3 py-1 rounded transition-colors">+ Añadir</button>
+                        </div>
+                        <template x-if="formOpciones.variantes.length === 0">
+                            <p class="text-xs text-gray-500 italic mb-4">No hay variantes registradas. (Se usará el precio regular del producto).</p>
+                        </template>
+                        <div class="space-y-3">
+                            <template x-for="(v, index) in formOpciones.variantes" :key="index">
+                                <div class="bg-[#111] p-3 rounded-lg border border-[#222] relative group">
+                                    <button type="button" @click="removeVariante(index)" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"><i class="ph-fill ph-x-circle"></i></button>
+                                    <div class="grid grid-cols-2 gap-2 mb-2">
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Nombre (Ej: Paquete x8)</label>
+                                            <input type="text" x-model="v.nombre" :name="`variantes[${index}][nombre]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded" required>
+                                        </div>
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Subtítulo (Opcional)</label>
+                                            <input type="text" x-model="v.subtitulo" :name="`variantes[${index}][subtitulo]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded">
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Precio (S/)</label>
+                                            <input type="number" step="0.01" x-model="v.precio" :name="`variantes[${index}][precio]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded" required>
+                                        </div>
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Pre. Secundario</label>
+                                            <input type="number" step="0.01" x-model="v.precio_secundario" :name="`variantes[${index}][precio_secundario]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded">
+                                        </div>
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Txt Secundario</label>
+                                            <input type="text" x-model="v.texto_secundario" :name="`variantes[${index}][texto_secundario]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded" placeholder="ej: con stevia">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Características -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm text-gray-300 font-bold uppercase tracking-widest border-b border-gold/30 pb-2">Características Extra</h3>
+                            <button type="button" @click="addCaracteristica()" class="text-xs bg-[#222] text-white hover:bg-gold hover:text-black px-3 py-1 rounded transition-colors">+ Añadir</button>
+                        </div>
+                        <template x-if="formOpciones.caracteristicas.length === 0">
+                            <p class="text-xs text-gray-500 italic mb-4">No hay características registradas.</p>
+                        </template>
+                        <div class="space-y-3">
+                            <template x-for="(c, index) in formOpciones.caracteristicas" :key="index">
+                                <div class="bg-[#111] p-3 rounded-lg border border-[#222] flex gap-2 items-center">
+                                    <div class="flex-grow space-y-2">
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Grupo (Ej: Variedades, Sabores)</label>
+                                            <input type="text" x-model="c.grupo" :name="`caracteristicas[${index}][grupo]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded" required>
+                                        </div>
+                                        <div>
+                                            <label class="text-[9px] text-gray-500 uppercase">Valores (Separados por coma)</label>
+                                            <input type="text" x-model="c.valor" :name="`caracteristicas[${index}][valor]`" class="w-full bg-[#1a1a1a] border border-[#333] p-1.5 text-xs text-white focus:border-gold outline-none rounded" required placeholder="Fresa, Coco, Ajonjolí">
+                                        </div>
+                                    </div>
+                                    <button type="button" @click="removeCaracteristica(index)" class="text-gray-500 hover:text-red-500 p-2"><i class="ph-fill ph-trash text-lg"></i></button>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                    <button type="submit" class="w-full bg-gold text-black py-4 text-sm font-bold uppercase tracking-widest hover:bg-white transition-colors rounded-lg shadow-lg">
+                        Guardar Variantes y Características
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Modal Nuevo Producto -->
@@ -264,7 +366,7 @@
 
                     <div>
                         <span class="text-xs text-gray-400 block mb-1">Opción B: Actualizar URL externa de la imagen</span>
-                        <input type="url" name="imagen_url_input" x-model="form.imagen_url" class="w-full bg-[#0a0a0a] border border-[#222] p-2.5 text-xs text-white focus:border-gold outline-none transition-colors rounded-md" placeholder="https://ejemplo.com/imagen.jpg">
+                        <input type="url" name="imagen_url_input" x-model="form.nueva_imagen_url" class="w-full bg-[#0a0a0a] border border-[#222] p-2.5 text-xs text-white focus:border-gold outline-none transition-colors rounded-md" placeholder="https://ejemplo.com/imagen.jpg">
                     </div>
                 </div>
 
@@ -332,6 +434,16 @@
                     <textarea name="descripcion" x-model="formCat.descripcion" rows="3" class="w-full bg-[#111] border border-[#222] p-3 text-sm text-gray-300 focus:border-gold outline-none transition-colors rounded-lg resize-none"></textarea>
                 </div>
 
+                <div class="space-y-1">
+                    <label class="text-[10px] text-gray-500 uppercase tracking-widest font-semibold">Plantilla HTML (Diseño de Cards) *</label>
+                    <select name="plantilla_html" x-model="formCat.plantilla_html" class="w-full bg-[#111] border border-[#222] p-3 text-sm text-white focus:border-gold outline-none transition-colors rounded-lg" required>
+                        <option value="ESTANDAR">ESTANDAR (Precio y descripción)</option>
+                        <option value="LISTA_VARIANTES">LISTA_VARIANTES (Para productos con variantes como Tostadas)</option>
+                        <option value="GRANOLAS">GRANOLAS (Cajas con precios en centro)</option>
+                        <option value="COMPLEMENTARIOS">COMPLEMENTARIOS (Para íconos o productos simples)</option>
+                    </select>
+                </div>
+
                 <button type="submit" class="w-full bg-gold text-black py-3 text-xs font-bold uppercase tracking-widest hover:bg-white transition-colors rounded-lg shadow-lg">
                     Guardar Cambios
                 </button>
@@ -347,6 +459,13 @@
             modalEditOpen: false,
             modalDeleteOpen: false,
             modalEditCatOpen: false,
+            modalVariantesOpen: false,
+            formOpciones: {
+                producto_id: '',
+                producto_nombre: '',
+                variantes: [],
+                caracteristicas: []
+            },
             form: {
                 id: '',
                 categoria_id: '',
@@ -354,6 +473,7 @@
                 descripcion: '',
                 precio_regular: '',
                 imagen_url: '',
+                nueva_imagen_url: '',
                 es_preventa: false
             },
             formDelete: {
@@ -363,7 +483,8 @@
             formCat: {
                 id: '',
                 nombre: '',
-                descripcion: ''
+                descripcion: '',
+                plantilla_html: 'ESTANDAR'
             },
             openNewModal() {
                 this.modalNewOpen = true;
@@ -375,6 +496,7 @@
                 this.form.descripcion = (producto.descripcion === null || producto.descripcion === 'null') ? '' : producto.descripcion;
                 this.form.precio_regular = (producto.precio_regular === null || producto.precio_regular === 'null') ? '' : producto.precio_regular;
                 this.form.imagen_url = producto.imagen_url || '';
+                this.form.nueva_imagen_url = '';
                 this.form.es_preventa = Boolean(Number(producto.es_preventa));
                 this.modalEditOpen = true;
             },
@@ -387,7 +509,28 @@
                 this.formCat.id = categoria.id;
                 this.formCat.nombre = categoria.nombre;
                 this.formCat.descripcion = (categoria.descripcion === null || categoria.descripcion === 'null') ? '' : categoria.descripcion;
+                this.formCat.plantilla_html = categoria.plantilla_html || 'ESTANDAR';
                 this.modalEditCatOpen = true;
+            },
+            openVariantesModal(producto) {
+                this.formOpciones.producto_id = producto.id;
+                this.formOpciones.producto_nombre = producto.nombre;
+                // Parse existing variants and characteristics (they are already arrays/objects because we json_encode the $prod array from PHP which contains them)
+                this.formOpciones.variantes = producto.variantes ? JSON.parse(JSON.stringify(producto.variantes)) : [];
+                this.formOpciones.caracteristicas = producto.caracteristicas ? JSON.parse(JSON.stringify(producto.caracteristicas)) : [];
+                this.modalVariantesOpen = true;
+            },
+            addVariante() {
+                this.formOpciones.variantes.push({ nombre: '', subtitulo: '', precio: '', precio_secundario: '', texto_secundario: '' });
+            },
+            removeVariante(index) {
+                this.formOpciones.variantes.splice(index, 1);
+            },
+            addCaracteristica() {
+                this.formOpciones.caracteristicas.push({ grupo: '', valor: '' });
+            },
+            removeCaracteristica(index) {
+                this.formOpciones.caracteristicas.splice(index, 1);
             }
         }
     }

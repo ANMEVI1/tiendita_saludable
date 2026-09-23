@@ -23,9 +23,9 @@ class Producto extends Model
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getPreventas()
+    public function getPreventas($limite = null)
     {
-        $stmt = $this->db->prepare("
+        $query = "
             SELECT p.*, c.nombre as categoria_nombre 
             FROM {$this->table} p
             LEFT JOIN ts_categorias c ON p.categoria_id = c.id
@@ -33,7 +33,13 @@ class Producto extends Model
               AND p.activo = 1 
               AND p.es_preventa = 1
             ORDER BY p.creado_en DESC
-        ");
+        ";
+
+        if ($limite) {
+            $query .= " LIMIT " . (int)$limite;
+        }
+
+        $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

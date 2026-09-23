@@ -11,6 +11,10 @@
                 extend: {
                     colors: {
                         gold: '#d4af37',
+                    },
+                    fontFamily: {
+                        heading: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
@@ -28,42 +32,55 @@
         </a>
 
         <div class="auth-box animate__animated animate__fadeInUp animate__delay-1s mx-4 mt-16 md:mt-0">
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <h1 class="text-3xl font-heading font-bold text-white tracking-widest uppercase mb-2">Registro</h1>
                 <p class="text-gray-400 text-sm font-light">Únete a la familia saludable</p>
             </div>
 
-            <form action="#" method="POST" id="register-form">
+            <?php if (isset($_SESSION['error_auth'])): ?>
+                <div class="bg-red-900/50 border border-red-500/50 text-red-200 px-4 py-3 rounded mb-6 text-sm text-center">
+                    <?= htmlspecialchars($_SESSION['error_auth']) ?>
+                    <?php unset($_SESSION['error_auth']); ?>
+                </div>
+            <?php endif; ?>
+
+            <form action="/registro" method="POST" id="register-form">
+                <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']) ?>">
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
                     <div class="floating-input">
-                        <input type="text" id="nombre" placeholder=" " required>
-                        <label for="nombre">Nombre</label>
+                        <input type="text" id="nombres" name="nombres" placeholder=" " maxlength="100" required>
+                        <label for="nombres">Nombre</label>
                     </div>
                     <div class="floating-input">
-                        <input type="text" id="apellido" placeholder=" " required>
-                        <label for="apellido">Apellido</label>
+                        <input type="text" id="apellidos" name="apellidos" placeholder=" " maxlength="100" required>
+                        <label for="apellidos">Apellido</label>
                     </div>
                 </div>
 
                 <div class="floating-input">
-                    <!-- Validación estricta con JS para permitir solo números -->
-                    <input type="tel" id="telefono" placeholder=" " pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15" required>
-                    <label for="telefono">Número de Teléfono</label>
+                    <input type="email" id="email" name="email" placeholder=" " maxlength="150" required>
+                    <label for="email">Correo Electrónico</label>
                 </div>
 
                 <div class="floating-input">
-                    <input type="password" id="password" placeholder=" " required>
+                    <input type="tel" id="telefono" name="telefono" placeholder=" " pattern="[0-9]*" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="15">
+                    <label for="telefono">Número de Teléfono (WhatsApp)</label>
+                </div>
+
+                <div class="floating-input">
+                    <input type="password" id="password" name="password" placeholder=" " minlength="6" maxlength="100" required>
                     <label for="password">Contraseña</label>
                     <i class="ph ph-eye password-toggle" onclick="togglePassword('password', this)" title="Mostrar contraseña"></i>
                 </div>
 
                 <div class="floating-input">
-                    <input type="password" id="confirm-password" placeholder=" " required>
-                    <label for="confirm-password">Confirmar Contraseña</label>
-                    <i class="ph ph-eye password-toggle" onclick="togglePassword('confirm-password', this)" title="Mostrar contraseña"></i>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder=" " minlength="6" maxlength="100" required>
+                    <label for="confirm_password">Confirmar Contraseña</label>
+                    <i class="ph ph-eye password-toggle" onclick="togglePassword('confirm_password', this)" title="Mostrar contraseña"></i>
                 </div>
 
-                <button type="submit" class="auth-btn mb-6 mt-2">Crear Cuenta</button>
+                <button type="submit" class="auth-btn mb-6 mt-2 uppercase tracking-widest text-sm font-bold">Crear Cuenta</button>
 
                 <p class="text-center text-sm text-gray-400">
                     ¿Ya tienes una cuenta? <a href="/login" class="page-transition text-[#d4af37] hover:text-white transition-colors ml-1 font-semibold uppercase tracking-wider text-xs">Iniciar Sesión</a>
@@ -80,25 +97,28 @@
                 iconElement.classList.replace('ph-eye', 'ph-eye-slash');
                 iconElement.setAttribute('title', 'Ocultar contraseña');
             } else {
-                input.type = 'password';
+                input.type = 'text';
                 iconElement.classList.replace('ph-eye-slash', 'ph-eye');
                 iconElement.setAttribute('title', 'Mostrar contraseña');
             }
         }
 
-        // Transición fluida de página
         document.querySelectorAll('.page-transition').forEach(link => {
             link.addEventListener('click', function(e) {
+                if (this.getAttribute('target') === '_blank') return;
                 e.preventDefault();
                 const href = this.getAttribute('href');
                 const wrapper = document.getElementById('page-wrapper');
                 
-                wrapper.classList.remove('animate__fadeIn');
-                wrapper.classList.add('animate__fadeOut', 'animate__faster');
-                
-                setTimeout(() => {
+                if (wrapper) {
+                    wrapper.classList.remove('animate__fadeIn');
+                    wrapper.classList.add('animate__fadeOut', 'animate__faster');
+                    setTimeout(() => {
+                        window.location.href = href;
+                    }, 300);
+                } else {
                     window.location.href = href;
-                }, 300);
+                }
             });
         });
     </script>

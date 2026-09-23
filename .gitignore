@@ -1,7 +1,9 @@
-# Environment variables
+# Environment variables - NINGÚN ARCHIVO ENV SE SUBE AL REPOSITORIO
 .env
+.env*
+*.env
+.env.example
 .env.local
-.env.*.local
 
 # Dependency directories
 /vendor/

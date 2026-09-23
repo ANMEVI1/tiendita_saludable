@@ -9,7 +9,7 @@ class Categoria extends Model
 {
     protected $table = 'ts_categorias';
 
-    public function getCatalogoCompleto()
+    public function getCatalogoCompleto($limitePorCategoria = null)
     {
         // Traer categorías activas con sus productos, ordenadas
         $stmt = $this->db->prepare("
@@ -21,19 +21,25 @@ class Categoria extends Model
         $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($categorias as &$cat) {
-            $cat['productos'] = $this->getProductosPorCategoria($cat['id']);
+            $cat['productos'] = $this->getProductosPorCategoria($cat['id'], $limitePorCategoria);
         }
 
         return $categorias;
     }
 
-    private function getProductosPorCategoria($categoria_id)
+    private function getProductosPorCategoria($categoria_id, $limite = null)
     {
-        $stmt = $this->db->prepare("
+        $query = "
             SELECT * FROM ts_productos 
             WHERE categoria_id = :cat_id AND activo = 1 AND eliminado_en IS NULL
             ORDER BY orden ASC
-        ");
+        ";
+
+        if ($limite) {
+            $query .= " LIMIT " . (int)$limite;
+        }
+
+        $stmt = $this->db->prepare($query);
         $stmt->execute(['cat_id' => $categoria_id]);
         $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

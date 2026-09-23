@@ -163,6 +163,74 @@ class AdminController
         exit();
     }
 
+    public function updateVariantes()
+    {
+        $db = Database::getInstance()->getConnection();
+        $producto_id = filter_input(INPUT_POST, 'producto_id', FILTER_VALIDATE_INT);
+        
+        if (!$producto_id) {
+            $_SESSION['error_msg'] = 'ID de producto no válido.';
+            header('Location: /admin/productos');
+            exit();
+        }
+
+        $variantes = $_POST['variantes'] ?? [];
+        $caracteristicas = $_POST['caracteristicas'] ?? [];
+
+        try {
+            $db->beginTransaction();
+
+            // 1. Limpiar variantes y características anteriores
+            $stmtDelVar = $db->prepare("DELETE FROM ts_producto_variantes WHERE producto_id = :id");
+            $stmtDelVar->execute(['id' => $producto_id]);
+
+            $stmtDelCar = $db->prepare("DELETE FROM ts_producto_caracteristicas WHERE producto_id = :id");
+            $stmtDelCar->execute(['id' => $producto_id]);
+
+            // 2. Insertar las nuevas variantes
+            if (!empty($variantes)) {
+                $stmtInsVar = $db->prepare("INSERT INTO ts_producto_variantes (producto_id, nombre, subtitulo, precio, precio_secundario, texto_secundario, orden) VALUES (:pid, :nombre, :sub, :precio, :presec, :txtsec, :orden)");
+                $orden = 1;
+                foreach ($variantes as $v) {
+                    if (trim($v['nombre']) === '' || trim($v['precio']) === '') continue; // Skip empty rows
+                    $stmtInsVar->execute([
+                        'pid' => $producto_id,
+                        'nombre' => trim(strip_tags($v['nombre'])),
+                        'sub' => !empty($v['subtitulo']) ? trim(strip_tags($v['subtitulo'])) : null,
+                        'precio' => floatval($v['precio']),
+                        'presec' => !empty($v['precio_secundario']) ? floatval($v['precio_secundario']) : null,
+                        'txtsec' => !empty($v['texto_secundario']) ? trim(strip_tags($v['texto_secundario'])) : null,
+                        'orden' => $orden++
+                    ]);
+                }
+            }
+
+            // 3. Insertar las nuevas características
+            if (!empty($caracteristicas)) {
+                $stmtInsCar = $db->prepare("INSERT INTO ts_producto_caracteristicas (producto_id, grupo, valor, orden) VALUES (:pid, :grupo, :valor, :orden)");
+                $orden = 1;
+                foreach ($caracteristicas as $c) {
+                    if (trim($c['grupo']) === '' || trim($c['valor']) === '') continue; // Skip empty rows
+                    $stmtInsCar->execute([
+                        'pid' => $producto_id,
+                        'grupo' => trim(strip_tags($c['grupo'])),
+                        'valor' => trim(strip_tags($c['valor'])),
+                        'orden' => $orden++
+                    ]);
+                }
+            }
+
+            $db->commit();
+            $_SESSION['success_msg'] = 'Opciones actualizadas exitosamente.';
+        } catch (\Exception $e) {
+            $db->rollBack();
+            $_SESSION['error_msg'] = 'Ocurrió un error al guardar: ' . $e->getMessage();
+        }
+
+        header('Location: /admin/productos');
+        exit();
+    }
+
     public function updateCategoria()
     {
         $db = Database::getInstance()->getConnection();
@@ -170,6 +238,7 @@ class AdminController
         $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $nombre = isset($_POST['nombre']) ? trim(strip_tags($_POST['nombre'])) : '';
         $descripcion = isset($_POST['descripcion']) ? trim(strip_tags($_POST['descripcion'])) : '';
+        $plantilla_html = isset($_POST['plantilla_html']) ? trim(strip_tags($_POST['plantilla_html'])) : 'ESTANDAR';
 
         if (!$id || !$nombre) {
             $_SESSION['error_msg'] = 'Datos inválidos o faltantes para la categoría.';
@@ -179,11 +248,12 @@ class AdminController
 
         $descripcion = $descripcion === '' ? null : $descripcion;
 
-        $stmt = $db->prepare("UPDATE ts_categorias SET nombre = :nombre, descripcion = :descripcion WHERE id = :id");
+        $stmt = $db->prepare("UPDATE ts_categorias SET nombre = :nombre, descripcion = :descripcion, plantilla_html = :plantilla_html WHERE id = :id");
         $stmt->execute([
-            'nombre'      => $nombre,
-            'descripcion' => $descripcion,
-            'id'          => $id
+            'nombre'         => $nombre,
+            'descripcion'    => $descripcion,
+            'plantilla_html' => $plantilla_html,
+            'id'             => $id
         ]);
 
         $_SESSION['success_msg'] = 'Categoría actualizada exitosamente.';

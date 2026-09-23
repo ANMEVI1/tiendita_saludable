@@ -39,55 +39,16 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                    
-                    <!-- Panetón Preventa -->
-                    <div class="preventa-card group flex flex-col md:flex-row animate-on-scroll" data-animation="animate__fadeInLeft">
-                        <div class="stock-indicator">Solo 50 Unidades</div>
-                        <div class="w-full md:w-2/5 h-80 md:h-auto relative overflow-hidden bg-[#111]">
-                            <img src="assets/info-a-recaudar-para-el-negocio/paneton.png" alt="Panetón Artesanal" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700">
-                        </div>
-                        <div class="w-full md:w-3/5 p-8 flex flex-col justify-center">
-                            <h2 class="text-3xl font-heading font-bold text-white mb-2">Panetón Artesanal Premium</h2>
-                            <p class="text-gray-400 text-sm font-light mb-6">Masa madre, endulzado con stevia y panela orgánica. Contiene pasas, higos, castañas, semillas de girasol, ajonjolí y kiwicha. Presentación en caja x 900g.</p>
-                            
-                            <div class="flex items-end gap-4 mb-8">
-                                <div>
-                                    <span class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Precio Preventa</span>
-                                    <span class="text-3xl font-bold text-gold">S/ 49.20</span>
-                                </div>
-                                <span class="text-lg text-gray-600 line-through mb-1">S/ 60.00</span>
-                            </div>
-                            
-                            <a href="https://wa.me/51984247684?text=Hola,%20deseo%20reservar%20el%20Panetón%20Artesanal%20en%20preventa." target="_blank" class="block text-center bg-gold text-black font-bold uppercase tracking-widest py-4 hover:bg-white transition-colors">
-                                <i class="ph-fill ph-whatsapp-logo mr-2"></i> Reservar Ahora
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Turrón Preventa -->
-                    <div class="preventa-card group flex flex-col md:flex-row animate-on-scroll" data-animation="animate__fadeInRight">
-                        <div class="stock-indicator">Solo 30 Unidades</div>
-                        <div class="w-full md:w-2/5 h-80 md:h-auto relative overflow-hidden bg-[#111]">
-                            <img src="assets/info-a-recaudar-para-el-negocio/turron.png" alt="Turrón Artesanal" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-700">
-                        </div>
-                        <div class="w-full md:w-3/5 p-8 flex flex-col justify-center">
-                            <h2 class="text-3xl font-heading font-bold text-white mb-2">Turrón Mix Frutos Secos (500g)</h2>
-                            <p class="text-gray-400 text-sm font-light mb-6">Elaborado con miel de frutas, aguaymanto, castañas, pecanas, arándanos, higos y damasco. Suave y 100% artesanal.</p>
-                            
-                            <div class="flex items-end gap-4 mb-8">
-                                <div>
-                                    <span class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Precio Preventa</span>
-                                    <span class="text-3xl font-bold text-gold">S/ 27.00</span>
-                                </div>
-                                <span class="text-lg text-gray-600 line-through mb-1">S/ 35.00</span>
-                            </div>
-                            
-                            <a href="https://wa.me/51984247684?text=Hola,%20deseo%20reservar%20el%20Turrón%20Artesanal%20en%20preventa." target="_blank" class="block text-center border border-gold text-gold font-bold uppercase tracking-widest py-4 hover:bg-gold hover:text-black transition-colors">
-                                <i class="ph-fill ph-whatsapp-logo mr-2"></i> Reservar Ahora
-                            </a>
-                        </div>
-                    </div>
-
+                    <?php if (empty($preventas)): ?>
+                        <p class="text-gray-400 col-span-full text-center py-8">No hay productos en preventa actualmente.</p>
+                    <?php else: ?>
+                        <?php foreach($preventas as $index => $p): ?>
+                            <?php 
+                                $whatsapp_numero = $configWeb['whatsapp_numero'] ?? '51900000000';
+                                include __DIR__ . '/partials/cards/_card_preventa.php'; 
+                            ?>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </section>

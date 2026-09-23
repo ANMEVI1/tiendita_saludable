@@ -61,6 +61,7 @@ $router->get('/admin', 'App\Controllers\AdminController@dashboard');
 $router->get('/admin/productos', 'App\Controllers\AdminController@productos');
 $router->post('/admin/productos/store', 'App\Controllers\AdminController@storeProducto');
 $router->post('/admin/productos/update', 'App\Controllers\AdminController@updateProducto');
+$router->post('/admin/productos/variantes/update', 'App\Controllers\AdminController@updateVariantes');
 $router->post('/admin/productos/delete', 'App\Controllers\AdminController@deleteProducto');
 $router->post('/admin/categorias/update', 'App\Controllers\AdminController@updateCategoria');
 
@@ -85,6 +86,8 @@ $router->post('/admin/cambiar-password', 'App\Controllers\AuthController@updateP
 
 $router->get('/login', 'App\Controllers\AuthController@showLogin');
 $router->post('/login', 'App\Controllers\AuthController@login');
+$router->get('/registro', 'App\Controllers\AuthController@showRegistro');
+$router->post('/registro', 'App\Controllers\AuthController@registro');
 $router->get('/logout', 'App\Controllers\AuthController@logout');
 
 // ----------------------------------------------------
