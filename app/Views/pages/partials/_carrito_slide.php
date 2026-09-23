@@ -101,20 +101,22 @@
                                 <p class="text-gold text-2xl" x-text="'S/ ' + cartTotalCost"></p>
                             </div>
                             <p class="mt-0.5 text-xs text-gray-400 font-light mb-6">El envío se calculará por WhatsApp. Gratis en Andrés Araujo Morán.</p>
-                            <div class="mt-6">
-                                <button @click="checkout" :disabled="cart.length === 0" 
-                                        class="flex items-center justify-center w-full rounded-sm border border-transparent bg-gold px-6 py-4 text-sm font-bold uppercase tracking-widest text-black shadow-sm hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-                                    <i class="ph-fill ph-whatsapp-logo mr-2 text-xl"></i> Hacer Pedido
-                                </button>
-                            </div>
-                            <div class="mt-6 flex justify-center text-center text-xs text-gray-500">
-                                <p>
-                                    o
-                                    <button type="button" @click="isCartOpen = false" class="font-medium text-gold hover:text-white transition-colors ml-1 uppercase tracking-widest">
-                                        Seguir comprando
-                                        <span aria-hidden="true"> &rarr;</span>
+                            <div class="mt-6 flex flex-col gap-3">
+                                <?php if(isset($_SESSION['user_id'])): ?>
+                                    <button @click="$dispatch('open-checkout')" :disabled="cart.length === 0" 
+                                            class="flex items-center justify-center w-full rounded-sm border border-transparent bg-gold px-6 py-4 text-sm font-bold uppercase tracking-widest text-black shadow-sm hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <i class="ph-bold ph-credit-card mr-2 text-xl"></i> Pagar Ahora
                                     </button>
-                                </p>
+                                <?php else: ?>
+                                    <a href="/login" 
+                                       class="flex items-center justify-center w-full rounded-sm border border-transparent bg-[#222] text-white px-6 py-4 text-sm font-bold uppercase tracking-widest shadow-sm hover:bg-gold hover:text-black transition-colors text-center">
+                                        <i class="ph-bold ph-sign-in mr-2 text-xl"></i> Iniciar Sesión para Comprar
+                                    </a>
+                                <?php endif; ?>
+                                
+                                <button type="button" @click="isCartOpen = false" class="flex items-center justify-center w-full rounded-sm border border-gold text-gold bg-transparent px-6 py-4 text-sm font-bold uppercase tracking-widest hover:bg-gold hover:text-black transition-colors mt-2">
+                                    Seguir Comprando
+                                </button>
                             </div>
                         </div>
                     </div>

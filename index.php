@@ -54,6 +54,19 @@ $router->get('/preventa', 'App\Controllers\HomeController@preventa');
 $router->get('/sobre-nosotros', 'App\Controllers\HomeController@sobreNosotros');
 
 // ----------------------------------------------------
+// RUTAS API CHECKOUT Y COMPRA
+// ----------------------------------------------------
+$router->get('/api/checkout/metodos-pago', 'App\Controllers\ShopController@getMetodosPago');
+$router->post('/api/checkout/procesar', 'App\Controllers\ShopController@procesarPedido');
+
+// ----------------------------------------------------
+// RUTAS API CLIENTE
+// ----------------------------------------------------
+$router->get('/api/cliente/perfil', 'App\Controllers\ClientController@getPerfil');
+$router->post('/api/cliente/update', 'App\Controllers\ClientController@updatePerfil');
+$router->get('/api/cliente/pedidos', 'App\Controllers\ClientController@getPedidos');
+
+// ----------------------------------------------------
 // RUTAS DE ADMINISTRACIÓN (Protegidas por Middleware)
 // ----------------------------------------------------
 
@@ -76,6 +89,18 @@ $router->get('/admin/clientes', 'App\Controllers\AdminController@clientes');
 $router->post('/admin/clientes/store', 'App\Controllers\AdminController@storeCliente');
 $router->post('/admin/clientes/update', 'App\Controllers\AdminController@updateCliente');
 $router->post('/admin/clientes/delete', 'App\Controllers\AdminController@deleteCliente');
+
+// RUTAS METODOS DE PAGO
+$router->get('/admin/metodos-pago', 'App\Controllers\AdminController@metodosPago');
+$router->post('/admin/metodos-pago/store', 'App\Controllers\AdminController@storeMetodoPago');
+$router->post('/admin/metodos-pago/update', 'App\Controllers\AdminController@updateMetodoPago');
+$router->post('/admin/metodos-pago/delete', 'App\Controllers\AdminController@deleteMetodoPago');
+
+// RUTAS PEDIDOS
+$router->get('/admin/pedidos', 'App\Controllers\AdminController@pedidos');
+$router->post('/admin/pedidos/update-status', 'App\Controllers\AdminController@updatePedidoStatus');
+$router->get('/admin/pedidos/detalle', 'App\Controllers\AdminController@getPedidoDetalle');
+
 $router->get('/admin/configuracion', 'App\Controllers\AdminController@configuracion');
 $router->post('/admin/configuracion/update', 'App\Controllers\AdminController@updateConfiguracion');
 $router->post('/admin/cambiar-password', 'App\Controllers\AuthController@updatePassword');
@@ -86,6 +111,8 @@ $router->post('/admin/cambiar-password', 'App\Controllers\AuthController@updateP
 
 $router->get('/login', 'App\Controllers\AuthController@showLogin');
 $router->post('/login', 'App\Controllers\AuthController@login');
+$router->get('/logout', 'App\Controllers\AuthController@logout');
+$router->post('/logout', 'App\Controllers\AuthController@logout');
 $router->get('/registro', 'App\Controllers\AuthController@showRegistro');
 $router->post('/registro', 'App\Controllers\AuthController@registro');
 $router->get('/logout', 'App\Controllers\AuthController@logout');

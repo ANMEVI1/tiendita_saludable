@@ -55,6 +55,7 @@
     <?php include __DIR__ . '/partials/_alpine_store.php'; ?>
     <?php include __DIR__ . '/partials/_carrito_slide.php'; ?>
     <?php include __DIR__ . '/partials/_modal_producto.php'; ?>
+    <?php include __DIR__ . '/partials/_checkout_modal.php'; ?>
 
 
 <?php include __DIR__ . '/../layouts/footer.php'; ?>

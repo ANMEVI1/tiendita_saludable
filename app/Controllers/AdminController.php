@@ -17,12 +17,15 @@ class AdminController
             'productos' => $db->query("SELECT COUNT(*) FROM ts_productos WHERE eliminado_en IS NULL")->fetchColumn(),
             'categorias' => $db->query("SELECT COUNT(*) FROM ts_categorias WHERE eliminado_en IS NULL")->fetchColumn(),
             'usuarios' => $db->query("SELECT COUNT(*) FROM ts_usuarios WHERE eliminado_en IS NULL")->fetchColumn(),
-            'clientes' => $db->query("SELECT COUNT(*) FROM ts_clientes WHERE eliminado_en IS NULL")->fetchColumn()
+            'clientes' => $db->query("SELECT COUNT(*) FROM ts_clientes WHERE eliminado_en IS NULL")->fetchColumn(),
+            'pedidos' => $db->query("SELECT COUNT(*) FROM ts_pedidos WHERE eliminado_en IS NULL")->fetchColumn(),
+            'pedidos_pendientes' => $db->query("SELECT COUNT(*) FROM ts_pedidos WHERE estado_pedido IN ('PENDIENTE', 'PAGADO', 'HORNEANDO') AND eliminado_en IS NULL")->fetchColumn()
         ];
 
         // Recientes para el resumen del Dashboard
         $ultimosProductos = $db->query("SELECT p.*, c.nombre as categoria_nombre FROM ts_productos p JOIN ts_categorias c ON p.categoria_id = c.id WHERE p.eliminado_en IS NULL ORDER BY p.id DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
         $ultimosUsuarios = $db->query("SELECT u.*, r.nombre as rol_nombre FROM ts_usuarios u JOIN ts_roles r ON u.rol_id = r.id WHERE u.eliminado_en IS NULL ORDER BY u.id DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
+        $ultimosPedidos = $db->query("SELECT p.*, c.nombres as cliente_nombres, c.apellidos as cliente_apellidos FROM ts_pedidos p JOIN ts_clientes c ON p.cliente_id = c.id WHERE p.eliminado_en IS NULL ORDER BY p.creado_en DESC LIMIT 5")->fetchAll(PDO::FETCH_ASSOC);
 
         require __DIR__ . '/../Views/pages/admin/dashboard.php';
     }
@@ -466,6 +469,190 @@ class AdminController
 
         header('Location: /admin/clientes');
         exit();
+    }
+    // ----------------------------------------------------
+    // CRUD METODOS DE PAGO
+    // ----------------------------------------------------
+    public function metodosPago()
+    {
+        $db = Database::getInstance()->getConnection();
+        $metodos = $db->query("SELECT * FROM ts_metodos_pago WHERE eliminado_en IS NULL ORDER BY id DESC")->fetchAll(PDO::FETCH_ASSOC);
+        require __DIR__ . '/../Views/pages/admin/metodos_pago.php';
+    }
+
+    public function storeMetodoPago()
+    {
+        $db = Database::getInstance()->getConnection();
+        $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+        $instrucciones = $_POST['instrucciones'] ?? '';
+        
+        $imagen_url = null;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../assets/img/metodos_pago/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            $fileName = time() . '_' . basename($_FILES['imagen']['name']);
+            $targetPath = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $targetPath)) {
+                $imagen_url = 'assets/img/metodos_pago/' . $fileName;
+            }
+        }
+
+        if (!$nombre) {
+            $_SESSION['error_msg'] = 'El nombre del método de pago es obligatorio.';
+            header('Location: /admin/metodos-pago');
+            exit();
+        }
+
+        $stmt = $db->prepare("INSERT INTO ts_metodos_pago (nombre, instrucciones, imagen_url, activo) VALUES (:nombre, :instrucciones, :imagen_url, 1)");
+        $stmt->execute([
+            'nombre' => $nombre,
+            'instrucciones' => trim($instrucciones),
+            'imagen_url' => $imagen_url
+        ]);
+
+        $_SESSION['success_msg'] = 'Método de pago registrado exitosamente.';
+        header('Location: /admin/metodos-pago');
+        exit();
+    }
+
+    public function updateMetodoPago()
+    {
+        $db = Database::getInstance()->getConnection();
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $nombre = filter_input(INPUT_POST, 'nombre', FILTER_SANITIZE_STRING);
+        $instrucciones = $_POST['instrucciones'] ?? '';
+        $activo = isset($_POST['activo']) ? 1 : 0;
+        
+        $imagen_url = null;
+        if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] == UPLOAD_ERR_OK) {
+            $uploadDir = __DIR__ . '/../../assets/img/metodos_pago/';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
+            $fileName = time() . '_' . basename($_FILES['imagen']['name']);
+            $targetPath = $uploadDir . $fileName;
+            
+            if (move_uploaded_file($_FILES['imagen']['tmp_name'], $targetPath)) {
+                $imagen_url = 'assets/img/metodos_pago/' . $fileName;
+            }
+        }
+
+        if (!$id || !$nombre) {
+            $_SESSION['error_msg'] = 'Datos inválidos.';
+            header('Location: /admin/metodos-pago');
+            exit();
+        }
+
+        if ($imagen_url) {
+            $stmt = $db->prepare("UPDATE ts_metodos_pago SET nombre = :nombre, instrucciones = :instrucciones, imagen_url = :img, activo = :activo WHERE id = :id");
+            $stmt->execute([
+                'nombre' => $nombre,
+                'instrucciones' => trim($instrucciones),
+                'img' => $imagen_url,
+                'activo' => $activo,
+                'id' => $id
+            ]);
+        } else {
+            $stmt = $db->prepare("UPDATE ts_metodos_pago SET nombre = :nombre, instrucciones = :instrucciones, activo = :activo WHERE id = :id");
+            $stmt->execute([
+                'nombre' => $nombre,
+                'instrucciones' => trim($instrucciones),
+                'activo' => $activo,
+                'id' => $id
+            ]);
+        }
+
+        $_SESSION['success_msg'] = 'Método de pago actualizado.';
+        header('Location: /admin/metodos-pago');
+        exit();
+    }
+
+    public function deleteMetodoPago()
+    {
+        $db = Database::getInstance()->getConnection();
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+
+        if ($id) {
+            $stmt = $db->prepare("UPDATE ts_metodos_pago SET eliminado_en = NOW(), activo = 0 WHERE id = :id");
+            $stmt->execute(['id' => $id]);
+            $_SESSION['success_msg'] = 'Método de pago eliminado.';
+        }
+
+        header('Location: /admin/metodos-pago');
+        exit();
+    }
+
+    // ----------------------------------------------------
+    // GESTION DE PEDIDOS
+    // ----------------------------------------------------
+    public function pedidos()
+    {
+        $db = Database::getInstance()->getConnection();
+        $sql = "
+            SELECT 
+                p.*,
+                c.nombres as cliente_nombres, c.apellidos as cliente_apellidos, c.telefono_whatsapp as cliente_whatsapp,
+                mp.nombre as metodo_pago_nombre
+            FROM ts_pedidos p
+            JOIN ts_clientes c ON p.cliente_id = c.id
+            JOIN ts_metodos_pago mp ON p.metodo_pago_id = mp.id
+            WHERE p.eliminado_en IS NULL
+            ORDER BY p.creado_en DESC
+        ";
+        $pedidos = $db->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        require __DIR__ . '/../Views/pages/admin/pedidos.php';
+    }
+
+    public function updatePedidoStatus()
+    {
+        $db = Database::getInstance()->getConnection();
+        $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING);
+
+        $estados_validos = ['PENDIENTE', 'PAGADO', 'HORNEANDO', 'EN_CAMINO', 'ENTREGADO', 'CANCELADO'];
+
+        if ($id && in_array($estado, $estados_validos)) {
+            $stmt = $db->prepare("UPDATE ts_pedidos SET estado_pedido = :estado WHERE id = :id");
+            $stmt->execute([
+                'estado' => $estado,
+                'id' => $id
+            ]);
+            $_SESSION['success_msg'] = 'Estado del pedido #' . $id . ' actualizado a ' . $estado . '.';
+        } else {
+            $_SESSION['error_msg'] = 'Error al actualizar el estado.';
+        }
+
+        header('Location: /admin/pedidos');
+        exit();
+    }
+
+    public function getPedidoDetalle()
+    {
+        header('Content-Type: application/json');
+        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        
+        if (!$id) {
+            echo json_encode(['error' => 'ID no proporcionado']);
+            exit;
+        }
+
+        $db = Database::getInstance()->getConnection();
+        
+        $sql = "
+            SELECT dp.*, prod.nombre as producto_nombre
+            FROM ts_detalle_pedidos dp
+            JOIN ts_productos prod ON dp.producto_id = prod.id
+            WHERE dp.pedido_id = :id
+        ";
+        $stmt = $db->prepare($sql);
+        $stmt->execute(['id' => $id]);
+        $detalles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        echo json_encode($detalles);
+        exit;
     }
 
     /**
