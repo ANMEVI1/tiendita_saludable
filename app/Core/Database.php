@@ -21,7 +21,8 @@ class Database
 
         $dbConfig = \App\Config\Database::getConfig();
 
-        $dsn = "mysql:host={$dbConfig['host']};dbname={$dbConfig['database']};charset={$dbConfig['charset']}";
+        $portStr = !empty($dbConfig['port']) ? ";port={$dbConfig['port']}" : "";
+        $dsn = "mysql:host={$dbConfig['host']}{$portStr};dbname={$dbConfig['database']};charset={$dbConfig['charset']}";
 
         try {
             $this->connection = new PDO($dsn, $dbConfig['username'], $dbConfig['password'], $dbConfig['options']);

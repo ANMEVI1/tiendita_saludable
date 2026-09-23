@@ -61,7 +61,20 @@ $router->get('/admin', 'App\Controllers\AdminController@dashboard');
 $router->get('/admin/productos', 'App\Controllers\AdminController@productos');
 $router->post('/admin/productos/store', 'App\Controllers\AdminController@storeProducto');
 $router->post('/admin/productos/update', 'App\Controllers\AdminController@updateProducto');
+$router->post('/admin/productos/delete', 'App\Controllers\AdminController@deleteProducto');
 $router->post('/admin/categorias/update', 'App\Controllers\AdminController@updateCategoria');
+
+// RUTAS CRUD USUARIOS
+$router->get('/admin/usuarios', 'App\Controllers\AdminController@usuarios');
+$router->post('/admin/usuarios/store', 'App\Controllers\AdminController@storeUsuario');
+$router->post('/admin/usuarios/update', 'App\Controllers\AdminController@updateUsuario');
+$router->post('/admin/usuarios/delete', 'App\Controllers\AdminController@deleteUsuario');
+
+// RUTAS CRUD CLIENTES
+$router->get('/admin/clientes', 'App\Controllers\AdminController@clientes');
+$router->post('/admin/clientes/store', 'App\Controllers\AdminController@storeCliente');
+$router->post('/admin/clientes/update', 'App\Controllers\AdminController@updateCliente');
+$router->post('/admin/clientes/delete', 'App\Controllers\AdminController@deleteCliente');
 $router->get('/admin/configuracion', 'App\Controllers\AdminController@configuracion');
 $router->post('/admin/configuracion/update', 'App\Controllers\AdminController@updateConfiguracion');
 $router->post('/admin/cambiar-password', 'App\Controllers\AuthController@updatePassword');

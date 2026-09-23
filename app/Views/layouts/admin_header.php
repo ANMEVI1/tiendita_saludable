@@ -81,6 +81,16 @@
                     <span class="text-sm tracking-wide">Catálogo y Productos</span>
                 </a>
 
+                <a href="/admin/usuarios" class="flex items-center gap-3 px-4 py-3 rounded-lg <?= strpos($_SERVER['REQUEST_URI'], '/admin/usuarios') !== false ? 'bg-gold text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]' : 'text-gray-400 hover:bg-[#1a1a1a] hover:text-white transition-colors' ?>">
+                    <i class="ph ph-users text-lg"></i>
+                    <span class="text-sm tracking-wide">Usuarios y Accesos</span>
+                </a>
+
+                <a href="/admin/clientes" class="flex items-center gap-3 px-4 py-3 rounded-lg <?= strpos($_SERVER['REQUEST_URI'], '/admin/clientes') !== false ? 'bg-gold text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]' : 'text-gray-400 hover:bg-[#1a1a1a] hover:text-white transition-colors' ?>">
+                    <i class="ph ph-user-address text-lg"></i>
+                    <span class="text-sm tracking-wide">Clientes y Perfiles</span>
+                </a>
+
                 <a href="/admin/configuracion" class="flex items-center gap-3 px-4 py-3 rounded-lg <?= strpos($_SERVER['REQUEST_URI'], '/admin/configuracion') !== false ? 'bg-gold text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.2)]' : 'text-gray-400 hover:bg-[#1a1a1a] hover:text-white transition-colors' ?>">
                     <i class="ph ph-gear text-lg"></i>
                     <span class="text-sm tracking-wide">Configuración Web</span>

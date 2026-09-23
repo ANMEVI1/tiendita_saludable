@@ -11,6 +11,7 @@ class Database
     {
         return [
             'host'     => App::env('DB_HOST', '127.0.0.1'),
+            'port'     => App::env('DB_PORT', '3306'),
             'database' => App::env('DB_NAME', 'db_tiendita_saludable'),
             'username' => App::env('DB_USER', 'root'),
             'password' => App::env('DB_PASS', ''),
