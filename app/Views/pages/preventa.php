@@ -1,0 +1,96 @@
+<?php $extraCss = 'assets/css/preventa.css'; ?>
+<?php include __DIR__ . '/../layouts/header.php'; ?>
+
+<main>
+        <!-- Hero Preventa -->
+        <section class="relative py-20 lg:py-32 flex items-center justify-center border-b border-[#222]">
+            <div class="absolute inset-0 hero-gradient-preventa z-0 animate__animated animate__fadeIn animate__slow"></div>
+            
+            <div class="relative z-10 text-center px-4 max-w-4xl mx-auto animate-on-scroll" data-animation="animate__fadeInUp">
+                <div class="inline-flex items-center gap-2 border border-gold/50 bg-gold/10 px-4 py-2 mb-8">
+                    <i class="ph-fill ph-clock text-gold"></i>
+                    <span class="text-gold text-xs font-bold tracking-[0.2em] uppercase">Oferta por Tiempo Limitado</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-heading font-black text-white mb-6 leading-tight glow-text">Reserva la Exclusividad</h1>
+                <p class="text-gray-300 text-lg md:text-xl font-light tracking-wide mb-12 max-w-2xl mx-auto">Asegura tu pedido antes de que se agote el stock. Producción limitada artesanalmente en Tumbes.</p>
+                
+                <!-- Countdown -->
+                <div class="flex justify-center gap-4 md:gap-8 mb-12 animate-on-scroll animate__delay-1s" data-animation="animate__fadeInUp">
+                    <div class="countdown-box px-6 py-4 flex flex-col items-center min-w-[100px]">
+                        <span class="text-4xl font-heading font-bold text-gold">05</span>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 mt-2">Días</span>
+                    </div>
+                    <div class="text-4xl font-heading font-bold text-gold/50 self-center">:</div>
+                    <div class="countdown-box px-6 py-4 flex flex-col items-center min-w-[100px]">
+                        <span class="text-4xl font-heading font-bold text-gold">14</span>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 mt-2">Horas</span>
+                    </div>
+                    <div class="text-4xl font-heading font-bold text-gold/50 self-center hidden md:block">:</div>
+                    <div class="countdown-box px-6 py-4 flex flex-col items-center min-w-[100px] hidden md:flex">
+                        <span class="text-4xl font-heading font-bold text-gold">32</span>
+                        <span class="text-xs uppercase tracking-widest text-gray-400 mt-2">Min</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Productos en Preventa -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                    
+                    <!-- Panetón Preventa -->
+                    <div class="preventa-card group flex flex-col md:flex-row animate-on-scroll" data-animation="animate__fadeInLeft">
+                        <div class="stock-indicator">Solo 50 Unidades</div>
+                        <div class="w-full md:w-2/5 h-80 md:h-auto relative overflow-hidden bg-[#111]">
+                            <img src="assets/info-a-recaudar-para-el-negocio/paneton.png" alt="Panetón Artesanal" class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="w-full md:w-3/5 p-8 flex flex-col justify-center">
+                            <h2 class="text-3xl font-heading font-bold text-white mb-2">Panetón Artesanal Premium</h2>
+                            <p class="text-gray-400 text-sm font-light mb-6">Masa madre, endulzado con stevia y panela orgánica. Contiene pasas, higos, castañas, semillas de girasol, ajonjolí y kiwicha. Presentación en caja x 900g.</p>
+                            
+                            <div class="flex items-end gap-4 mb-8">
+                                <div>
+                                    <span class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Precio Preventa</span>
+                                    <span class="text-3xl font-bold text-gold">S/ 49.20</span>
+                                </div>
+                                <span class="text-lg text-gray-600 line-through mb-1">S/ 60.00</span>
+                            </div>
+                            
+                            <a href="https://wa.me/51984247684?text=Hola,%20deseo%20reservar%20el%20Panetón%20Artesanal%20en%20preventa." target="_blank" class="block text-center bg-gold text-black font-bold uppercase tracking-widest py-4 hover:bg-white transition-colors">
+                                <i class="ph-fill ph-whatsapp-logo mr-2"></i> Reservar Ahora
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Turrón Preventa -->
+                    <div class="preventa-card group flex flex-col md:flex-row animate-on-scroll" data-animation="animate__fadeInRight">
+                        <div class="stock-indicator">Solo 30 Unidades</div>
+                        <div class="w-full md:w-2/5 h-80 md:h-auto relative overflow-hidden bg-[#111]">
+                            <img src="assets/info-a-recaudar-para-el-negocio/turron.png" alt="Turrón Artesanal" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-700">
+                        </div>
+                        <div class="w-full md:w-3/5 p-8 flex flex-col justify-center">
+                            <h2 class="text-3xl font-heading font-bold text-white mb-2">Turrón Mix Frutos Secos (500g)</h2>
+                            <p class="text-gray-400 text-sm font-light mb-6">Elaborado con miel de frutas, aguaymanto, castañas, pecanas, arándanos, higos y damasco. Suave y 100% artesanal.</p>
+                            
+                            <div class="flex items-end gap-4 mb-8">
+                                <div>
+                                    <span class="block text-xs uppercase tracking-widest text-gray-500 mb-1">Precio Preventa</span>
+                                    <span class="text-3xl font-bold text-gold">S/ 27.00</span>
+                                </div>
+                                <span class="text-lg text-gray-600 line-through mb-1">S/ 35.00</span>
+                            </div>
+                            
+                            <a href="https://wa.me/51984247684?text=Hola,%20deseo%20reservar%20el%20Turrón%20Artesanal%20en%20preventa." target="_blank" class="block text-center border border-gold text-gold font-bold uppercase tracking-widest py-4 hover:bg-gold hover:text-black transition-colors">
+                                <i class="ph-fill ph-whatsapp-logo mr-2"></i> Reservar Ahora
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+<?php include __DIR__ . '/../layouts/footer.php'; ?>

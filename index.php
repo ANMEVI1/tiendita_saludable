@@ -1,0 +1,87 @@
+<?php
+require __DIR__ . '/vendor/autoload.php';
+
+// 1. Cargar variables de entorno de forma segura
+try {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+} catch (Exception $e) {}
+
+// Inicializar sesión de forma segura
+ini_set('session.cookie_httponly', 1);
+ini_set('session.use_only_cookies', 1);
+session_start();
+
+// Forzar codificación UTF-8 a nivel HTTP
+header('Content-Type: text/html; charset=utf-8');
+
+// Generar Token CSRF global si no existe
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// 2. Inicializar el Logger (Monolog) para tener registros profesionales
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+$log = new Logger('tiendita');
+$log->pushHandler(new StreamHandler(__DIR__ . '/logs/app.log', Logger::WARNING));
+
+// 3. Inicializar el Router
+$router = new \Bramus\Router\Router();
+
+// Middleware: Protección de rutas administrativas
+$router->before('GET|POST', '/admin/.*', function() {
+    if (!isset($_SESSION['user_id']) || $_SESSION['rol_id'] != 1) {
+        header('Location: /login');
+        exit();
+    }
+});
+
+// Middleware: Validación de CSRF para métodos POST protegidos
+$router->before('POST', '/admin/.*', function() {
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        header('HTTP/1.1 403 Forbidden');
+        die('Error CSRF: Solicitud no autorizada.');
+    }
+});
+
+// ----------------------------------------------------
+// RUTAS PRINCIPALES (Fase 2: Conectadas a BD)
+// ----------------------------------------------------
+
+$router->get('/', 'App\Controllers\HomeController@index');
+$router->get('/preventa', 'App\Controllers\HomeController@preventa');
+$router->get('/sobre-nosotros', 'App\Controllers\HomeController@sobreNosotros');
+
+// ----------------------------------------------------
+// RUTAS DE ADMINISTRACIÓN (Protegidas por Middleware)
+// ----------------------------------------------------
+
+$router->get('/admin', 'App\Controllers\AdminController@dashboard');
+$router->get('/admin/productos', 'App\Controllers\AdminController@productos');
+$router->post('/admin/productos/store', 'App\Controllers\AdminController@storeProducto');
+$router->post('/admin/productos/update', 'App\Controllers\AdminController@updateProducto');
+$router->post('/admin/categorias/update', 'App\Controllers\AdminController@updateCategoria');
+$router->get('/admin/configuracion', 'App\Controllers\AdminController@configuracion');
+$router->post('/admin/configuracion/update', 'App\Controllers\AdminController@updateConfiguracion');
+$router->post('/admin/cambiar-password', 'App\Controllers\AuthController@updatePassword');
+
+// ----------------------------------------------------
+// AUTENTICACIÓN
+// ----------------------------------------------------
+
+$router->get('/login', 'App\Controllers\AuthController@showLogin');
+$router->post('/login', 'App\Controllers\AuthController@login');
+$router->get('/logout', 'App\Controllers\AuthController@logout');
+
+// ----------------------------------------------------
+// MANEJO DE ERRORES 404
+// ----------------------------------------------------
+$router->set404(function() use ($log) {
+    header('HTTP/1.1 404 Not Found');
+    $log->warning("Página no encontrada: " . $_SERVER['REQUEST_URI']);
+    echo "<div style='font-family: sans-serif; text-align:center; margin-top:50px;'><h1>404 - Página no encontrada</h1><p><a href=\"/\">Volver al inicio</a></p></div>";
+});
+
+// Arrancar la aplicación
+$router->run();
